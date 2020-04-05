@@ -1,6 +1,6 @@
 # QuantumEspresso
-*.in
-*.out
+*.pwi
+*.pwo
 pwscf.save
 
 # Byte-compiled / optimized / DLL files
