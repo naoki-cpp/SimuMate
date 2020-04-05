@@ -1,4 +1,6 @@
 # QuantumEspresso
+*.in
+*.xml
 *.pwi
 *.pwo
 pwscf.save
