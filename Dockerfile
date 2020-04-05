@@ -8,6 +8,7 @@ RUN git clone https://github.com/QEF/q-e.git && \
 	make all && \
 	echo "export PATH=${HOME}/q-e/bin:$PATH" > ~/.bashrc && \
 	mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo && \
-	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" > ~/.bashrc && \
-	cd /usr/share/espresso/pseudo && \
+	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" > ~/.bashrc
+COPY pseudourl /usr/share/espresso/pseudo/
+RUN cd /usr/share/espresso/pseudo && \
 	wget -i pseudourl
