@@ -1,7 +1,20 @@
 FROM debian:latest
-RUN apt-get update -y
-RUN apt-get install -y wget curl git build-essential gfortran mpich python3 python3-pip
 
+# Create User
+# username: docker
+# password: docker
+ARG DOCKER_UID=1000
+ARG DOCKER_USER=docker
+ARG DOCKER_PASSWORD=docker
+RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
+  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
+# change user
+USER ${DOCKER_USER}
+
+RUN sudo apt update -y
+RUN sudo apt install -y wget curl git build-essential gfortran mpich python3 python3-pip
+
+# Quantum Espresso, ASE
 RUN cd ${HOME} && \
 	git clone https://github.com/QEF/q-e.git && \
 	cd q-e && \
