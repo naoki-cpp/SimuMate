@@ -10,15 +10,13 @@ RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
   && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 
 # as su
+RUN apt update -y
+RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-pip
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
 
 # change user
-RUN apt update -y
-RUN apt install -y sudo
-
 USER ${DOCKER_USER}
-RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-pip
 
 # Quantum Espresso, ASE
 RUN cd ${HOME} && \
