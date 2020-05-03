@@ -9,6 +9,7 @@ ARG DOCKER_PASSWORD=docker
 RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
   && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 # change user
+RUN apt install sudo
 USER ${DOCKER_USER}
 
 RUN sudo apt update -y
