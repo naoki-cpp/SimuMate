@@ -10,3 +10,6 @@ docker pull naokicpp/simu_mate:latest
 ```
 docker run -it --rm --name sample -v /Your/Workspace:/mnt/volume naokicpp/simu_mate:latest
 ```
+## 入っているもの
+- Quantum Espresso．buildした時点での最新版が入る．
+- Atomic Simulation Environment．これもbuildした時点での最新版が入る．
