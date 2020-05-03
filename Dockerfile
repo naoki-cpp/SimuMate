@@ -14,6 +14,8 @@ RUN apt update -y
 RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-pip
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
+RUN cd /usr/share/espresso/pseudo && \
+	wget -i pseudourl
 
 # change user
 USER ${DOCKER_USER}
@@ -26,8 +28,6 @@ RUN cd ${HOME} && \
 	make all && \
 	echo "export PATH=${HOME}/q-e/bin:$PATH" >> ~/.bashrc && \
 	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" >> ~/.bashrc
-RUN cd /usr/share/espresso/pseudo && \
-	wget -i pseudourl
 
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | python3 && \
 	python3 -m pip install --upgrade --user ase
