@@ -12,6 +12,8 @@ RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
 # as su
 RUN apt update -y
 RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-pip
+# for OOMMF
+RUN apt install tk-dev tcl-dev
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
 RUN cd /usr/share/espresso/pseudo && \
@@ -31,3 +33,12 @@ RUN cd ${HOME} && \
 
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | python3 && \
 	python3 -m pip install --upgrade --user ase
+
+#OOMMF
+RUN wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
+	tar -zxvf  oommf20a2_20190930.tar.gz && \
+	cd oommf && \
+	tclsh oommf.tcl +platform && \
+	./oommf.tcl pimake distclean && \
+	./oommf.tcl pimake upgrade && \
+	./oommf.tcl pimake
