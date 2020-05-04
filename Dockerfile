@@ -15,6 +15,7 @@ RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-
 RUN apt install -y sudo
 # for OOMMF
 RUN apt install -y tk-dev tcl-dev
+# for pseudopotential
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
 RUN cd /usr/share/espresso/pseudo && \
@@ -39,6 +40,7 @@ RUN curl -kL https://bootstrap.pypa.io/get-pip.py | python3 && \
 RUN cd ${HOME} && \
 	wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
 	tar -zxvf  oommf20a2_20190930.tar.gz && \
+	rm oommf20a2_20190930.tar.gz && \
 	cd oommf && \
 	tclsh oommf.tcl +platform && \
 	./oommf.tcl pimake distclean && \
