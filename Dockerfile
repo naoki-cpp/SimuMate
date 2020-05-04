@@ -35,10 +35,12 @@ RUN curl -kL https://bootstrap.pypa.io/get-pip.py | python3 && \
 	python3 -m pip install --upgrade --user ase
 
 #OOMMF
-RUN wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
+RUN cd ${HOME} && \
+	wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
 	tar -zxvf  oommf20a2_20190930.tar.gz && \
 	cd oommf && \
 	tclsh oommf.tcl +platform && \
 	./oommf.tcl pimake distclean && \
 	./oommf.tcl pimake upgrade && \
-	./oommf.tcl pimake
+	./oommf.tcl pimake && \
+	echo "alias oommf='tclsh ${HOME}/oommf/oommf.tcl'" >>  ~/.bashrc
