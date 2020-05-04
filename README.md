@@ -19,3 +19,4 @@ xhost +local:`docker inspect --format='{{.Config.Hostname}}' [コンテナのID]
 ## 入っているもの
 - Quantum Espresso．buildした時点での最新版が入る．
 - Atomic Simulation Environment．これもbuildした時点での最新版が入る．
+- OOMMF(The Object Oriented MicroMagnetic Framework)．[Alpha release of OOMMF 2.0](https://math.nist.gov/oommf/software-20.html)がインストールされている．`oommf`コマンドで起動できる．
