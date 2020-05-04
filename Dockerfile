@@ -12,15 +12,10 @@ RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
 # as su
 RUN apt update -y
 RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-pip
-<<<<<<< HEAD
 RUN apt install -y sudo
 # for OOMMF
 RUN apt install -y tk-dev tcl-dev
 # for pseudopotential
-=======
-# for OOMMF
-RUN apt install -y tk-dev tcl-dev
->>>>>>> f6a60c4e87e4c61af4d6ed42473e5479ebbc49be
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
 RUN cd /usr/share/espresso/pseudo && \
