@@ -13,7 +13,7 @@ RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
 # as su
 RUN apt update -y
 RUN apt install -y wget curl git build-essential gfortran mpich python3 && \
-	curl -kL https://bootstrap.pypa.io/get-pip.py | sudo python3
+	curl -kL https://bootstrap.pypa.io/get-pip.py | python3
 RUN apt install -y sudo
 # for OOMMF
 RUN apt install -y tk-dev tcl-dev
