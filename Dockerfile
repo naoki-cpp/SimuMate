@@ -25,7 +25,7 @@ RUN cd /usr/share/espresso/pseudo && \
 
 # change user
 USER ${DOCKER_USER}
-
+RUN mkdir ${HOME}/.local
 # Quantum Espresso, ASE
 RUN cd ${HOME}/.local && \
 	git clone https://github.com/QEF/q-e.git && \
