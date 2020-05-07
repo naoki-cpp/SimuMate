@@ -1,5 +1,7 @@
 FROM debian:latest
 
+# use bash
+SHELL ["/bin/bash", "-c"]
 # Create User
 # username: docker
 # password: docker
