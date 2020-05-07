@@ -26,17 +26,16 @@ RUN cd /usr/share/espresso/pseudo && \
 
 # change user
 USER ${DOCKER_USER}
-RUN mkdir ${HOME}/.local && \
-	echo export PATH='${HOME}/.local/bin:$PATH' >> ~/.bashrc && \
-	source ~/.bashrc
+RUN mkdir ${HOME}/.local
+ENV PATH $PATH:'${HOME}/.local/bin'
 # Quantum Espresso, ASE
 RUN cd ${HOME}/.local && \
 	git clone https://github.com/QEF/q-e.git && \
 	cd q-e && \
 	./configure --with-internal-blas --with-internal-lapack && \
-	make all && \
-	echo export PATH='${HOME}/.local/q-e/bin:$PATH' >> ~/.bashrc && \
-	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" >> ~/.bashrc
+	make all
+ENV PATH $PATH:'${HOME}/.local/q-e/bin'
+ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
 
 RUN pip3 install --upgrade --user  jupyter ase && \
 	ase test
