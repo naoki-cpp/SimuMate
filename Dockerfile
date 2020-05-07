@@ -7,8 +7,7 @@ ARG DOCKER_UID=1000
 ARG DOCKER_USER=docker
 ARG DOCKER_PASSWORD=docker
 RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
-  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd \
-  && echo "export PATH=$/home/docker/.local/bin:$PATH" >> ~/.bashrc
+  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 
 # as su
 RUN apt update -y
@@ -25,17 +24,19 @@ RUN cd /usr/share/espresso/pseudo && \
 
 # change user
 USER ${DOCKER_USER}
-RUN mkdir ${HOME}/.local
+RUN mkdir ${HOME}/.local && \
+	echo export PATH='${HOME}/.local/bin:$PATH' >> ~/.bashrc
 # Quantum Espresso, ASE
 RUN cd ${HOME}/.local && \
 	git clone https://github.com/QEF/q-e.git && \
 	cd q-e && \
 	./configure --with-internal-blas --with-internal-lapack && \
 	make all && \
-	echo "export PATH=${HOME}/.local/q-e/bin:$PATH" >> ~/.bashrc && \
+	echo export PATH='${HOME}/.local/q-e/bin:$PATH' >> ~/.bashrc && \
 	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" >> ~/.bashrc
 
-RUN python3 -m pip install --upgrade --user  jupyter ase
+RUN python3 -m pip install --upgrade --user  jupyter ase && \
+	ase test
 
 #OOMMF
 RUN cd ${HOME}/.local && \
