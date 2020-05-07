@@ -25,7 +25,8 @@ RUN cd /usr/share/espresso/pseudo && \
 # change user
 USER ${DOCKER_USER}
 RUN mkdir ${HOME}/.local && \
-	echo export PATH='${HOME}/.local/bin:$PATH' >> ~/.bashrc
+	echo export PATH='${HOME}/.local/bin:$PATH' >> ~/.bashrc && \
+	source ~/.bashrc
 # Quantum Espresso, ASE
 RUN cd ${HOME}/.local && \
 	git clone https://github.com/QEF/q-e.git && \
@@ -35,7 +36,7 @@ RUN cd ${HOME}/.local && \
 	echo export PATH='${HOME}/.local/q-e/bin:$PATH' >> ~/.bashrc && \
 	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" >> ~/.bashrc
 
-RUN python3 -m pip install --upgrade --user  jupyter ase && \
+RUN pip3 install --upgrade --user  jupyter ase && \
 	ase test
 
 #OOMMF
