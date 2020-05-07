@@ -7,16 +7,20 @@ ARG DOCKER_UID=1000
 ARG DOCKER_USER=docker
 ARG DOCKER_PASSWORD=docker
 RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
-  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd \
-  && echo "export PATH=$/home/docker/.local/bin:$PATH" >> ~/.bashrc
+  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 
 # as su
-RUN apt update -y
-RUN apt install -y wget curl git build-essential gfortran mpich python3 python3-distutils && \
-	curl -kL https://bootstrap.pypa.io/get-pip.py | python3
-RUN apt install -y sudo
+RUN apt update -y && apt install -y \
+	wget sudo \
+# for QuantumEspresso and ASE
+	curl git build-essential gfortran mpich python3 python3-distutils \
 # for OOMMF
-RUN apt install -y tk-dev tcl-dev
+	tk-dev tcl-dev \ 
+	&& \
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/* && \
+	curl -kL https://bootstrap.pypa.io/get-pip.py | python3
+RUN apt install -y 
 # for pseudopotential
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
@@ -25,20 +29,22 @@ RUN cd /usr/share/espresso/pseudo && \
 
 # change user
 USER ${DOCKER_USER}
-RUN mkdir ${HOME}/.local
+RUN mkdir /home/${DOCKER_USER}/.local
+ENV PATH $PATH:/home/${DOCKER_USER}/.local/bin
 # Quantum Espresso, ASE
-RUN cd ${HOME}/.local && \
+RUN cd /home/${DOCKER_USER}/.local && \
 	git clone https://github.com/QEF/q-e.git && \
 	cd q-e && \
 	./configure --with-internal-blas --with-internal-lapack && \
-	make all && \
-	echo "export PATH=${HOME}/.local/q-e/bin:$PATH" >> ~/.bashrc && \
-	echo "export ESPRESSO_PSEUDO=/usr/share/espresso/pseudo" >> ~/.bashrc
+	make all
+ENV PATH $PATH:/home/${DOCKER_USER}/.local/q-e/bin
+ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
 
-RUN python3 -m pip install --upgrade --user  jupyter ase
+RUN pip3 install --upgrade --user  jupyter ase && \
+	ase test
 
 #OOMMF
-RUN cd ${HOME}/.local && \
+RUN cd /home/${DOCKER_USER}/.local && \
 	wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
 	tar -zxvf  oommf20a2_20190930.tar.gz && \
 	rm oommf20a2_20190930.tar.gz && \
@@ -47,4 +53,4 @@ RUN cd ${HOME}/.local && \
 	./oommf.tcl pimake distclean && \
 	./oommf.tcl pimake upgrade && \
 	./oommf.tcl pimake && \
-	echo "alias oommf='tclsh ${HOME}/.local/oommf/oommf.tcl'" >>  ~/.bashrc
+	echo "alias oommf='tclsh ~/.local/oommf/oommf.tcl'" >>  ~/.bashrc
