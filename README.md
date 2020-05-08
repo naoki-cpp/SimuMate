@@ -23,7 +23,7 @@ docker run -it --rm -e -p 8888:8888 naokicpp/simu_mate:latest
 ```
 などとしてからコンテナ内で
 ```
-jupyter notebook --port 8000 --ip=0.0.0.0 --allow-root
+jupyter notebook --port 8888 --ip=0.0.0.0 --allow-root
 ```
 を実行するとurlが発行されるのでそこにホスト側からアクセスすると使える．
 ## 入っているもの
