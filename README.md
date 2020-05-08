@@ -1,4 +1,5 @@
 # SimuMate
+## 概要
 第一原理計算用．
 ## Docker
 イメージがDocker Hubの`naokicpp/simu_mate:latest`にある．
@@ -15,8 +16,14 @@ docker run -it --rm -e DISPLAY=$DISPLAY -v /Your/Workspace:/mnt/volume -v /tmp/.
 ```
 xhost +local:`docker inspect --format='{{.Config.Hostname}}' [コンテナのID]`
 ```
-とするとGUIアプリケーションも使えるようになる．
+とするとGUIアプリケーションも使えるようになる．また，Jupyter Notebookを使うには，portオプション
+`-p 8888:8888`を付けて，
+```
+docker run -it --rm -e -p 8888:8888 naokicpp/simu_mate:latest
+```
+などとしてからコンテナ内で`jupyter notebook`を実行するとurlが発行されるのでそこにホスト側からアクセスすると使える．
 ## 入っているもの
 - Quantum Espresso．buildした時点での最新版が入る．
 - Atomic Simulation Environment．これもbuildした時点での最新版が入る．
 - OOMMF(The Object Oriented MicroMagnetic Framework)．[Alpha release of OOMMF 2.0](https://math.nist.gov/oommf/software-20.html)がインストールされている．`oommf`コマンドで起動できる．
+
