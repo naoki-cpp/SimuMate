@@ -26,6 +26,16 @@ docker run -it --rm -e -p 8888:8888 naokicpp/simu_mate:latest
 jupyter notebook --port 8888 --ip=0.0.0.0 --allow-root
 ```
 を実行するとurlが発行されるのでそこにホスト側からアクセスすると使える．
+## Docker-compose
+docker-composeを用いると`docker run`の一連の動作を一括で行える．
+```
+docker-compose up -d
+```
+の後，
+```
+docker-compose exec local bash
+```
+とすればコンテナを起動できる．
 ## 入っているもの
 - Quantum Espresso．buildした時点での最新版が入る．
 - Atomic Simulation Environment．これもbuildした時点での最新版が入る．
