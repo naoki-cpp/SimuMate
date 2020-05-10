@@ -7,14 +7,14 @@ ARG DOCKER_UID=1000
 ARG DOCKER_USER=docker
 ARG DOCKER_PASSWORD=docker
 RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
-  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
+	&& echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 
 # as su
 RUN apt update -y && apt install -y \
 	wget sudo \
-# for QuantumEspresso and ASE
+	# for QuantumEspresso and ASE
 	curl git build-essential gfortran mpich python3 python3-distutils \
-# for OOMMF
+	# for OOMMF
 	tk-dev tcl-dev \ 
 	&& \
 	apt-get clean && \
@@ -40,8 +40,7 @@ RUN cd /home/${DOCKER_USER}/.local && \
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/q-e/bin
 ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
 
-RUN pip3 install --upgrade --user  jupyter ase && \
-	ase test
+RUN pip3 install --upgrade --user  jupyter ase
 
 #OOMMF
 RUN cd /home/${DOCKER_USER}/.local && \
@@ -54,3 +53,5 @@ RUN cd /home/${DOCKER_USER}/.local && \
 	./oommf.tcl pimake upgrade && \
 	./oommf.tcl pimake && \
 	echo "alias oommf='tclsh ~/.local/oommf/oommf.tcl'" >>  ~/.bashrc
+#tests
+CMD ase test
