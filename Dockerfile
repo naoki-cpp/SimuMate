@@ -29,10 +29,12 @@ RUN cd /usr/share/espresso/pseudo && \
 
 # change user
 USER ${DOCKER_USER}
-RUN mkdir /home/${DOCKER_USER}/.local
+WORKDIR /home/${DOCKER_USER}
+
+RUN mkdir .local
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/bin
 # Quantum Espresso, ASE
-RUN cd /home/${DOCKER_USER}/.local && \
+RUN cd .local && \
 	git clone https://github.com/QEF/q-e.git && \
 	cd q-e && \
 	./configure --with-internal-blas --with-internal-lapack && \
@@ -43,7 +45,7 @@ ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
 RUN pip3 install --upgrade --user  jupyter ase
 
 #OOMMF
-RUN cd /home/${DOCKER_USER}/.local && \
+RUN cd .local && \
 	wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
 	tar -zxvf  oommf20a2_20190930.tar.gz && \
 	rm oommf20a2_20190930.tar.gz && \
