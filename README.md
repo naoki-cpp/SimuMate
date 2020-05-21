@@ -33,7 +33,7 @@ docker-compose up -d
 ```
 の後，
 ```
-docker-compose exec local bash
+docker-compose exec local-linux bash
 ```
 とすればコンテナを起動できる．
 ## 入っているもの
