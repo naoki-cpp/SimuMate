@@ -33,6 +33,11 @@ WORKDIR /home/${DOCKER_USER}
 
 RUN mkdir .local
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/bin
+
+# for Python3 script(ST-FMR)
+RUN sudo apt install python3-tk && \
+	pip3 install --upgrade --user  pandas
+
 # Quantum Espresso, ASE
 RUN cd .local && \
 	git clone https://github.com/QEF/q-e.git && \
@@ -44,7 +49,7 @@ ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
 
 RUN pip3 install --upgrade --user  jupyter ase
 
-#OOMMF
+# OOMMF
 RUN cd .local && \
 	wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
 	tar -zxvf  oommf20a2_20190930.tar.gz && \
@@ -55,5 +60,6 @@ RUN cd .local && \
 	./oommf.tcl pimake upgrade && \
 	./oommf.tcl pimake && \
 	echo "alias oommf='tclsh ~/.local/oommf/oommf.tcl'" >>  ~/.bashrc
+
 #tests
 CMD ase test
