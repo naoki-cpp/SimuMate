@@ -1,3 +1,5 @@
+# ST-FMR
+notebook/ST-FMR/data/*
 # QuantumEspresso
 *.in
 *.xml
