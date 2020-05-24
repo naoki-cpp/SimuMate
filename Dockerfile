@@ -16,11 +16,12 @@ RUN apt update -y && apt install -y \
 	curl git build-essential gfortran mpich python3 python3-distutils \
 	# for OOMMF
 	tk-dev tcl-dev \ 
+	# for Python3 script(ST-FMR)
+	python3-tk \
 	&& \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	curl -kL https://bootstrap.pypa.io/get-pip.py | python3
-RUN apt install -y 
 # for pseudopotential
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
@@ -34,9 +35,11 @@ WORKDIR /home/${DOCKER_USER}
 RUN mkdir .local
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/bin
 
-# for Python3 script(ST-FMR)
-RUN sudo apt install -y python3-tk && \
-	pip3 install --upgrade --user  pandas
+RUN pip3 install --upgrade --user \
+	# for Python3 script(ST-FMR)
+	pandas \
+	# for jupyter, ASE
+	jupyter ase
 
 # Quantum Espresso, ASE
 RUN cd .local && \
@@ -46,8 +49,6 @@ RUN cd .local && \
 	make all
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/q-e/bin
 ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
-
-RUN pip3 install --upgrade --user  jupyter ase
 
 # OOMMF
 RUN cd .local && \
