@@ -35,7 +35,7 @@ RUN mkdir .local
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/bin
 
 # for Python3 script(ST-FMR)
-RUN sudo apt install python3-tk && \
+RUN sudo apt install -y python3-tk && \
 	pip3 install --upgrade --user  pandas
 
 # Quantum Espresso, ASE
