@@ -20,6 +20,7 @@ RUN apt update -y && apt install -y \
 	python3-tk \
 	# for Spirit (QT5 required)
 	qtbase5-dev libqt5charts5-dev \
+	cmake \
 	&& \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
