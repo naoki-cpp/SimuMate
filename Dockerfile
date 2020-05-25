@@ -18,6 +18,8 @@ RUN apt update -y && apt install -y \
 	tk-dev tcl-dev \ 
 	# for Python3 script(ST-FMR)
 	python3-tk \
+	# for Spirit (QT5 required)
+	qtbase5-dev libqt5charts5-dev \
 	&& \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
@@ -61,6 +63,16 @@ RUN cd .local && \
 	./oommf.tcl pimake upgrade && \
 	./oommf.tcl pimake && \
 	echo "alias oommf='tclsh ~/.local/oommf/oommf.tcl'" >>  ~/.bashrc
+
+# Spirit
+RUN cd .local && \
+	git clone https://github.com/spirit-code/spirit.git && \
+	cd spirit && \
+	mkdir build && \
+	cd build && \
+	cmake SPIRIT_UI_CXX_USE_QT .. && \
+	make && \
+	echo "alias spirit='exec ${HOME}/.local/spirit/spirit'" >>  ~/.bashrc
 
 #tests
 CMD ase test
