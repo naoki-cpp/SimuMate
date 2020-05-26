@@ -5,7 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Set env
+    
+    - name: set env
+      env:
+        DOCKER_HUB_BASE_NAME: naokicpp/simu_mate
       run: |
         if [ "${{ github.event_name }}" = 'release' ]; then
           export TAG_NAME="${{ github.event.release.tag_name }}"
@@ -16,12 +19,17 @@ jobs:
     
     - name: build image
       run: |
-        docker build . -t "${HUB_TAG}"
+        docker build . -t simu_mate:built
+        docker tag simu_mate:built "${HUB_TAG}"
 
-    - name: Login to Registries
+    - name: login to Registries
       if: github.event_name != 'pull_request'
       env:
         DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME}}
       run: |
         echo "${DOCKER_HUB_TOKEN}" | docker login -u ${DOCKER_USERNAME} --password-stdin
+    
+    - name: push image
+      if: github.event_name != 'pull_request'
+      run: docker push "${HUB_TAG}"
