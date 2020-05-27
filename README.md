@@ -1,4 +1,5 @@
 # SimuMate
+![Publish Docker](https://github.com/naoki-cpp/SimuMate/workflows/Publish%20Docker/badge.svg)
 ## 概要
 第一原理計算用．
 ## Docker
