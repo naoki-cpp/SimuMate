@@ -16,11 +16,15 @@ RUN apt update -y && apt install -y \
 	curl git build-essential gfortran mpich python3 python3-distutils \
 	# for OOMMF
 	tk-dev tcl-dev \ 
+	# for Python3 script(ST-FMR)
+	python3-tk \
+	# for Spirit (QT5 required)
+	qtbase5-dev libqt5charts5-dev \
+	cmake \
 	&& \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	curl -kL https://bootstrap.pypa.io/get-pip.py | python3
-RUN apt install -y 
 # for pseudopotential
 RUN mkdir /usr/share/espresso && mkdir /usr/share/espresso/pseudo
 COPY pseudourl /usr/share/espresso/pseudo/
@@ -33,6 +37,13 @@ WORKDIR /home/${DOCKER_USER}
 
 RUN mkdir .local
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/bin
+
+RUN pip3 install --upgrade --user \
+	# for Python3 script(ST-FMR)
+	pandas \
+	# for jupyter, ASE
+	jupyter ase
+
 # Quantum Espresso, ASE
 RUN cd .local && \
 	git clone https://github.com/QEF/q-e.git && \
@@ -42,9 +53,7 @@ RUN cd .local && \
 ENV PATH $PATH:/home/${DOCKER_USER}/.local/q-e/bin
 ENV ESPRESSO_PSEUDO '/usr/share/espresso/pseudo'
 
-RUN pip3 install --upgrade --user  jupyter ase
-
-#OOMMF
+# OOMMF
 RUN cd .local && \
 	wget https://math.nist.gov/oommf/dist/oommf20a2_20190930.tar.gz && \
 	tar -zxvf  oommf20a2_20190930.tar.gz && \
@@ -55,5 +64,16 @@ RUN cd .local && \
 	./oommf.tcl pimake upgrade && \
 	./oommf.tcl pimake && \
 	echo "alias oommf='tclsh ~/.local/oommf/oommf.tcl'" >>  ~/.bashrc
+
+# Spirit
+RUN cd .local && \
+	git clone https://github.com/spirit-code/spirit.git && \
+	cd spirit && \
+	mkdir build && \
+	cd build && \
+	cmake SPIRIT_UI_CXX_USE_QT .. && \
+	make && \
+	echo "alias spirit='exec ${HOME}/.local/spirit/spirit'" >>  ~/.bashrc
+
 #tests
 CMD ase test
